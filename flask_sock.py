@@ -12,6 +12,10 @@ from wsproto.events import (
 )
 
 
+class ConnectionClosed(RuntimeError):
+    pass
+
+
 class _WebSocket:
     def __init__(self, receive_bytes=4096):
         self.receive_bytes = receive_bytes
@@ -38,6 +42,8 @@ class _WebSocket:
         self.event.clear()
 
     def send(self, data):
+        if not self.connected:
+            raise ConnectionClosed()
         if isinstance(data, bytes):
             out_data = self.ws.send(Message(data=data))
         else:
@@ -50,7 +56,7 @@ class _WebSocket:
                 return None
             self.event.clear()
         if not self.connected:
-            return None
+            raise ConnectionClosed()
         return self.input_buffer.pop(0)
 
     def _thread(self):
@@ -108,7 +114,10 @@ class Sock:
     def route(self, path, **kwargs):
         def decorator(f):
             def websocket_route():
-                f(_WebSocket())
+                try:
+                    f(_WebSocket())
+                except ConnectionClosed:
+                    pass
                 return ''
 
             kwargs['websocket'] = True

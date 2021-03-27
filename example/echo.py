@@ -12,7 +12,6 @@ def index():
 
 @sock.route('/echo')
 def echo(sock):
-    while sock.connected:
+    while True:
         data = sock.receive()
-        if data:
-            sock.send(data)
+        sock.send(data)
