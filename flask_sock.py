@@ -16,23 +16,25 @@ class ConnectionClosed(RuntimeError):
     pass
 
 
-class _WebSocket:
-    def __init__(self, receive_bytes=4096):
+class WebSocket:
+    def __init__(self, environ, receive_bytes=4096):
         self.receive_bytes = receive_bytes
         self.input_buffer = []
         self.event = threading.Event()
         self.connected = False
 
-        self.stream = request.environ.get('werkzeug.socket')
+        self.stream = environ.get('werkzeug.socket')
         if self.stream is None:
-            self.stream = request.environ.get('gunicorn.socket')
+            self.stream = environ.get('gunicorn.socket')
         if self.stream is None:
             abort(500)
         self.ws = WSConnection(ConnectionType.SERVER)
 
         in_data = b'GET / HTTP/1.1\r\n'
-        for header, value in request.headers.items():
-            in_data += f'{header}: {value}\r\n'.encode()
+        for key, value in environ.items():
+            if key.startswith('HTTP_'):
+                header = '-'.join([p.capitalize() for p in key[5:].split('_')])
+                in_data += f'{header}: {value}\r\n'.encode()
         in_data += b'\r\n'
         self.ws.receive_data(in_data)
 
@@ -115,7 +117,7 @@ class Sock:
         def decorator(f):
             def websocket_route():
                 try:
-                    f(_WebSocket())
+                    f(WebSocket(request.environ))
                 except ConnectionClosed:
                     pass
                 return ''
