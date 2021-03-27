@@ -12,7 +12,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name='flask-sock',
-    version='0.0.1',
+    version='0.0.2',
     url='http://github.com/miguelgrinberg/flask-sock/',
     license='MIT',
     author='Miguel Grinberg',
@@ -26,6 +26,7 @@ setup(
     install_requires=[
         'flask',
         'werkzeug>=2.0.0rc3',
+        'wsproto',
     ],
     classifiers=[
         'Environment :: Web Environment',
