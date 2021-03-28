@@ -9,6 +9,7 @@ from wsproto.events import (
     TextMessage,
     BytesMessage,
 )
+from wsproto.frame_protocol import CloseReason
 
 
 class ConnectionClosed(RuntimeError):
@@ -59,6 +60,11 @@ class WebSocket:
         if not self.connected:
             raise ConnectionClosed()
         return self.input_buffer.pop(0)
+
+    def close(self, reason=None, message=None):
+        out_data = self.ws.send(CloseConnection(
+            reason or CloseReason.NORMAL_CLOSURE, message))
+        self.stream.send(out_data)
 
     def _thread(self):
         if not self._handle_events():
