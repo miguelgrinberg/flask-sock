@@ -1,5 +1,8 @@
 # flask-sock
-WebSocket support for Flask
+WebSocket support for Flask (and possibly other WSGI frameworks). What makes
+this package different than other WebSocket servers is that it does not require
+a greenlet based server (gevent, eventlet) to work. This server is compatible
+with Werkzeug (Flask's development web server) and Gunicorn.
 
 ## Installation
 
