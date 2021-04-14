@@ -23,9 +23,15 @@ class WebSocket:
         self.event = threading.Event()
         self.connected = False
 
-        self.stream = environ.get('werkzeug.socket')
-        if self.stream is None:
+        self.stream = None
+        if 'werkzeug.socket' in environ:
+            self.stream = environ.get('werkzeug.socket')
+        elif 'gunicorn.socket' in environ:
             self.stream = environ.get('gunicorn.socket')
+        elif 'eventlet.input' in environ:
+            self.stream = environ.get('eventlet.input').get_socket()
+        elif environ.get('SERVER_SOFTWARE', '').startswith('gevent'):
+            self.stream = environ['wsgi.input'].raw._sock
         if self.stream is None:
             raise RuntimeError('socket not available in WSGI environment')
         self.ws = WSConnection(ConnectionType.SERVER)
