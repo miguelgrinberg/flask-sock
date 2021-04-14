@@ -1,8 +1,21 @@
 # flask-sock
 WebSocket support for Flask (and possibly other WSGI frameworks). What makes
 this package different than other WebSocket servers is that it does not require
-a greenlet based server (gevent, eventlet) to work. This server is compatible
-with Werkzeug (Flask's development web server) and Gunicorn.
+a greenlet based server (gevent, eventlet) to work.
+
+This WebSocket implementation is compatible with the following synchronous
+web servers:
+
+- Werkzeug (Flask's development web server)
+- Gunicorn with the `gthread` worker
+
+In addition to the servers above, the following asynchronous web servers are
+supported when the Python standard library is monkey patched:
+
+- Eventlet's WSGI server
+- Gevent's WSGI server
+- Gunicorn with the `eventlet` worker
+- Gunicorn with the `gevent` worker
 
 ## Installation
 
@@ -30,10 +43,7 @@ def echo(ws):
 ## Running
 
 To run an application that uses this package, you need to use a supported web
-server.  At this time the supported servers are:
-
-- Werkzeug (Flask development server)
-- Gunicorn
+server.
 
 ### Running with Werkzeug
 
@@ -66,3 +76,55 @@ threads:
 ```bash
 gunicorn -b :5000 --workers 4 --threads 100 module:app
 ```
+
+### Running with eventlet
+
+To serve your application with the eventlet WSGI server you can use the
+following script:
+
+```python
+import eventlet
+eventlet.monkey_patch()
+
+from eventlet import wsgi
+from module import app
+
+wsgi.server(eventlet.listen(('', 5000)), app)
+```
+
+It is also possible to use Gunicorn's `eventlet` worker:
+
+```bash
+gunicorn -b :5000 --worker-class eventlet module:app
+```
+
+Gunicorn's `eventlet` worker handles a maximum of 1000 concurrent requests in a
+single worker process by default. The maximum number of concurrent requests
+can be changed with the `--worker-connections` option. The number of workers
+can be changed with the `--workers` option.
+
+### Running with gevent
+
+To serve your application with the gevent WSGI server you can use the following
+script:
+
+```python
+from gevent import monkey
+monkey.patch_all()
+
+from gevent.pywsgi import WSGIServer
+from module import app
+
+WSGIServer(('127.0.0.1', 5000), app).serve_forever()
+```
+
+It is also possible to use Gunicorn's `gevent` worker:
+
+```bash
+gunicorn -b :5000 --worker-class gevent module:app
+```
+
+Gunicorn's `gevent` worker handles a maximum of 1000 concurrent requests in a
+single worker process by default. The maximum number of concurrent requests
+can be changed with the `--worker-connections` option. The number of workers
+can be changed with the `--workers` option.
