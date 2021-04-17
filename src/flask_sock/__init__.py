@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import Blueprint, request, abort
-from .ws import WebSocket, ConnectionClosed
+from simple_websocket import Server, ConnectionClosed
 
 
 class Sock:
@@ -22,7 +22,7 @@ class Sock:
             @wraps(f)
             def websocket_route(*args, **kwargs):
                 try:
-                    f(WebSocket(request.environ), *args, **kwargs)
+                    f(Server(request.environ), *args, **kwargs)
                 except ConnectionClosed:
                     pass
                 return ''
