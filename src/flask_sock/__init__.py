@@ -21,9 +21,14 @@ class Sock:
         def decorator(f):
             @wraps(f)
             def websocket_route(*args, **kwargs):
+                ws = Server(request.environ)
                 try:
-                    f(Server(request.environ), *args, **kwargs)
+                    f(ws, *args, **kwargs)
                 except ConnectionClosed:
+                    pass
+                try:
+                    ws.close()
+                except:
                     pass
                 return ''
 
