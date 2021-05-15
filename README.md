@@ -1,4 +1,6 @@
 # flask-sock
+[![Build status](https://github.com/miguelgrinberg/flask-sock/workflows/build/badge.svg)](https://github.com/miguelgrinberg/flask-sock/actions) [![codecov](https://codecov.io/gh/miguelgrinberg/flask-sock/branch/master/graph/badge.svg)](https://codecov.io/gh/miguelgrinberg/flask-sock)
+
 WebSocket support for Flask (and possibly other WSGI frameworks). What makes
 this package different than other WebSocket servers is that it does not require
 a greenlet based server (gevent, eventlet) to work.
