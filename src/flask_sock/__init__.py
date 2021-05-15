@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Blueprint, request, abort
+from flask import Blueprint, request
 from simple_websocket import Server, ConnectionClosed
 
 
@@ -28,7 +28,7 @@ class Sock:
                     pass
                 try:
                     ws.close()
-                except:
+                except:  # noqa: E722
                     pass
                 return ''
 
