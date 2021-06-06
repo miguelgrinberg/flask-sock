@@ -1,5 +1,4 @@
-Flask-Sock change log
-=====================
+# Flask-Sock change log
 
 **Release 0.4.0** - 2021-06-06
 
