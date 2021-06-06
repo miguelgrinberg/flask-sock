@@ -1,7 +1,7 @@
 Supported web servers
 ---------------------
 
-This extensions can be used to create Flask routes that handle WebSocket
+This extension can be used to create Flask routes that handle WebSocket
 requests when used with `Werkzeug <https://werkzeug.palletsprojects.com/>`_,
 `Gunicorn <https://gunicorn.org/>`_, `Eventlet <https://eventlet.net/>`_ or
 `Gevent <http://www.gevent.org/>`_. The following sections describe deployment

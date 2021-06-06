@@ -6,9 +6,11 @@
 Flask-Sock
 ==========
 
-WebSocket support for Flask. What makes this extension different than others
-is that it works with the Flask development web server, without the need to
-install a greenlet based server such as gevent or eventlet.
+WebSocket support for Flask.
+
+What makes this extension different than others is that it works with the Flask
+development web server, without the need to install a greenlet based server
+such as gevent or eventlet.
 
 .. toctree::
    :maxdepth: 2
