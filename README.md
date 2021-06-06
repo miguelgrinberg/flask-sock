@@ -12,3 +12,4 @@ Gevent.
 
 - [Documentation](http://flask-sock.readthedocs.io/en/latest/)
 - [PyPI](https://pypi.python.org/pypi/flask-sock)
+- [Change Log](https://github.com/miguelgrinberg/flask-sock/blob/main/CHANGES.md)
