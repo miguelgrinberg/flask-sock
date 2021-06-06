@@ -1,0 +1,34 @@
+Flask-Sock change log
+====================
+
+**Release 0.3.0** - 2021-05-10
+
+- Move generic WebSocket code to [simple-websocket](https://github.com/miguelgrinberg/simple-websocket) package ([commit](https://github.com/miguelgrinberg/flask-sock/commit/b3d5ecb31495430d6eda7b88830c8f4cca51e192))
+
+**Release 0.2.0** - 2021-04-14
+
+- Updated readme ([commit](https://github.com/miguelgrinberg/flask-sock/commit/4ffdcecfb8949327db6cdeb7a25fad1ca11507ec))
+- Add support for eventlet and gevent ([commit](https://github.com/miguelgrinberg/flask-sock/commit/ac6d3077ca4f37af3b63dd1d0ab263031ae9bc49))
+
+**Release 0.1.0** - 2021-04-03
+
+- Handle path arguments correctly ([commit](https://github.com/miguelgrinberg/flask-sock/commit/a9a216b7892a2fd5c23118a548d647a4820bf23e))
+- Added minimal usage documentation to readme file ([commit](https://github.com/miguelgrinberg/flask-sock/commit/7f8c8fd53f43dae427263b98a3268d42603187b9))
+
+**Release 0.0.5** - 2021-03-28
+
+- Close method ([commit](https://github.com/miguelgrinberg/flask-sock/commit/8c0895c351a4e6b9379f784f48c0e02394d5d030))
+
+**Release 0.0.4** - 2021-03-27
+
+- Better code organization ([commit](https://github.com/miguelgrinberg/flask-sock/commit/8a89e2999d05fa1274dcf6583fb07c0f9bf2ac47))
+
+**Release 0.0.3** - 2021-03-27
+
+- Remove dependency on Flask request from WebSocket class ([commit](https://github.com/miguelgrinberg/flask-sock/commit/1f856ad35ad1f330d22cf5af62c10ded21a86e75))
+- Add ConnectionClosed exception ([commit](https://github.com/miguelgrinberg/flask-sock/commit/e1bcadf85ff5e142604fef18cbf6d83e5d935db1))
+- Added HTML template to echo example ([commit](https://github.com/miguelgrinberg/flask-sock/commit/65ef8373e7ec0aa1019c0d1764d0d64e24c78a3a))
+
+**Release 0.0.2** - 2021-03-27
+
+- First commit ([commit](https://github.com/miguelgrinberg/flask-sock/commit/4161939e7c75e20903c92148f6fbd215c3178139))
