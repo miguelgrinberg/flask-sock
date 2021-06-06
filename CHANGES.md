@@ -1,5 +1,15 @@
 Flask-Sock change log
-====================
+=====================
+
+**Release 0.4.0** - 2021-06-06
+
+- More robustness when the connection is closed ([commit](https://github.com/miguelgrinberg/flask-sock/commit/1a323e55109aa0dc524ea46ee6742ba69263416c))
+- Add a dependency on Flask 2.x ([commit](https://github.com/miguelgrinberg/flask-sock/commit/d8e15f476d151855e8a3d8715090877f5886b2dd))
+- Add a change log ([commit](https://github.com/miguelgrinberg/flask-sock/commit/fab096164c9eee5142eb940f28df763ab533be5f))
+- Documentation ([commit](https://github.com/miguelgrinberg/flask-sock/commit/3c8761bc8b52ff9c0b3d16d9b96c47b2260e7b85))
+- More examples ([commit](https://github.com/miguelgrinberg/flask-sock/commit/66b458dc131a5bf75731aaf888b42aa0d2e4e58c))
+- GitHub builds ([commit](https://github.com/miguelgrinberg/flask-sock/commit/6733afdb2aea763e43ac42d6528f474cc3bd40c4))
+- Unit testing framework ([commit](https://github.com/miguelgrinberg/flask-sock/commit/e7eeb425bd72cfb266be03c7d4eaa57d72d19f7a))
 
 **Release 0.3.0** - 2021-05-10
 
