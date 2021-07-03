@@ -17,8 +17,7 @@ such as gevent or eventlet.
 
    quickstart
    web_servers
-    
+   api    
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
