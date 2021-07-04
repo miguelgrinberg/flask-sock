@@ -52,7 +52,7 @@ class Sock:
         """
         def decorator(f):
             @wraps(f)
-            def websocket_route(*args, **kwargs):
+            def websocket_route(*args, **kwargs):  # pragma: no cover
                 ws = Server(request.environ)
                 try:
                     f(ws, *args, **kwargs)
