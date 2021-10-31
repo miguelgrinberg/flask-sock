@@ -78,5 +78,5 @@ single worker process by default. The maximum number of concurrent requests can
 be changed with the ``--worker-connections`` option. The number of workers can
 be changed with the ``--workers`` option.
 
-Unless other WebSocket packages for Gevent, this extension does not require the
+Unlike other WebSocket packages for Gevent, this extension does not require the
 ``gevent-websocket`` package to be installed.

@@ -14,7 +14,6 @@ def index():
 def echo(sock):
     while True:
         data = sock.receive()
-        print(len(data))
         sock.send(data)
 
 
