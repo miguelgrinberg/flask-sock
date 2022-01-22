@@ -15,10 +15,10 @@ def index():
 
 
 @sock.route('/echo')
-def echo(sock):
+def echo(ws):
     while True:
-        data = sock.receive()
-        sock.send(data)
+        data = ws.receive()
+        ws.send(data)
 
 
 if __name__ == '__main__':
