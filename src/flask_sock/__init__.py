@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Blueprint, request
+from flask import Blueprint, request, Response
 from simple_websocket import Server, ConnectionClosed
 
 
@@ -62,7 +62,26 @@ class Sock:
                     ws.close()
                 except:  # noqa: E722
                     pass
-                return ''
+
+                class WebSocketResponse(Response):
+                    def __call__(self, *args, **kwargs):
+                        if ws.mode == 'eventlet':
+                            try:
+                                from eventlet.wsgi import WSGI_LOCAL
+                                ALREADY_HANDLED = []
+                            except ImportError:
+                                from eventlet.wsgi import ALREADY_HANDLED
+                                WSGI_LOCAL = None
+
+                            if hasattr(WSGI_LOCAL, 'already_handled'):
+                                WSGI_LOCAL.already_handled = True
+                            return ALREADY_HANDLED
+                        elif ws.mode == 'gunicorn':
+                            raise StopIteration()
+                        else:
+                            return []
+
+                return WebSocketResponse()
 
             kwargs['websocket'] = True
             return (self.app or self.bp).route(path, **kwargs)(websocket_route)

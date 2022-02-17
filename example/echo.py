@@ -14,6 +14,8 @@ def index():
 def echo(ws):
     while True:
         data = ws.receive()
+        if data == 'close':
+            break
         ws.send(data)
 
 
