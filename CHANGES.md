@@ -1,5 +1,13 @@
 # Flask-Sock change log
 
+**Release 0.5.0** - 2022-02-17
+
+- Clean close of the WebSocket connection when possible [#20](https://github.com/miguelgrinberg/flask-sock/issues/20) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/32f5d060105512b98b064081f6c441885d24e323))
+- Avoid duplicate variable names in examples ([commit](https://github.com/miguelgrinberg/flask-sock/commit/8f42c60f87c81437a56a43d7b91ea2d33a2d3ca0))
+- Unit tests ([commit](https://github.com/miguelgrinberg/flask-sock/commit/9b2e335b2bdb566def9c206a5fffb7269d9904ad))
+- API reference documentation ([commit](https://github.com/miguelgrinberg/flask-sock/commit/18b1cc080e56bfd81dc10d12e8de731c220a9dee))
+- Update builds for python 3.10 and pypy3.8 ([commit](https://github.com/miguelgrinberg/flask-sock/commit/d337288ac7d7bb878cfe9609e1f6703300b51ed4))
+
 **Release 0.4.0** - 2021-06-06
 
 - More robustness when the connection is closed ([commit](https://github.com/miguelgrinberg/flask-sock/commit/1a323e55109aa0dc524ea46ee6742ba69263416c))
