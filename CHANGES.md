@@ -1,5 +1,9 @@
 # Flask-Sock change log
 
+**Release 0.5.1** - 2022-03-11
+
+- Prevent AssertionError with Werkzeug when connection ends ([commit](https://github.com/miguelgrinberg/flask-sock/commit/f6142a60ec666f8dd440235dffb86fe7a55c2642))
+
 **Release 0.5.0** - 2022-02-17
 
 - Clean close of the WebSocket connection when possible [#20](https://github.com/miguelgrinberg/flask-sock/issues/20) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/32f5d060105512b98b064081f6c441885d24e323))
