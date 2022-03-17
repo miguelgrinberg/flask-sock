@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, Response, current_app
 from simple_websocket import Server, ConnectionClosed
 
 
@@ -53,7 +53,8 @@ class Sock:
         def decorator(f):
             @wraps(f)
             def websocket_route(*args, **kwargs):  # pragma: no cover
-                ws = Server(request.environ)
+                ws = Server(request.environ, **current_app.config.get(
+                    'SOCK_SERVER_OPTIONS', {}))
                 try:
                     f(ws, *args, **kwargs)
                 except ConnectionClosed:
