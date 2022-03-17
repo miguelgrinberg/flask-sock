@@ -1,5 +1,9 @@
 # Flask-Sock change log
 
+**Release 0.5.2** - 2022-03-17
+
+- Pass WebSocket server options in the configuration [#7](https://github.com/miguelgrinberg/flask-sock/issues/7) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/126c86a133fa5d56a5539e784bd0252f8f94140a))
+
 **Release 0.5.1** - 2022-03-11
 
 - Prevent AssertionError with Werkzeug when connection ends ([commit](https://github.com/miguelgrinberg/flask-sock/commit/f6142a60ec666f8dd440235dffb86fe7a55c2642))
