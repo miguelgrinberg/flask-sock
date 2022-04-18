@@ -1,6 +1,17 @@
+import sys
 from functools import wraps
 from flask import Blueprint, request, Response, current_app
 from simple_websocket import Server, ConnectionClosed
+
+
+class FlaskSockConnectionError(BaseException):
+    def __init__(self, *args):
+        self.default_tracebacklimit = getattr(sys, 'tracebacklimit', 100)
+        sys.tracebacklimit = 0
+        super().__init__(*args)
+
+    def __del__(self):
+        sys.tracebacklimit = self.default_tracebacklimit
 
 
 class Sock:
@@ -9,6 +20,7 @@ class Sock:
     :param app: The Flask application instance. If not provided, it must be
                 initialized later by calling the :func:`Sock.init_app` method.
     """
+
     def __init__(self, app=None):
         self.app = None
         self.bp = None
@@ -50,6 +62,7 @@ class Sock:
         :param kwargs: additional route options. See the Flask documentation
                        for the ``app.route`` decorator for details.
         """
+
         def decorator(f):
             @wraps(f)
             def websocket_route(*args, **kwargs):  # pragma: no cover
@@ -80,7 +93,10 @@ class Sock:
                         elif ws.mode == 'gunicorn':
                             raise StopIteration()
                         elif ws.mode == 'werkzeug':
-                            raise ConnectionError()
+                            if current_app.debug:
+                                raise FlaskSockConnectionError()
+                            else:
+                                raise ConnectionError()
                         else:
                             return []
 
