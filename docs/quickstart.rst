@@ -32,6 +32,8 @@ class.
 Example
 -------
 
+Create an app.py
+
 ::
 
     from flask import Flask, render_template
@@ -46,3 +48,9 @@ Example
         while True:
             data = ws.receive()
             ws.send(data)
+
+Now you can start the server by
+
+::
+
+    flask run
