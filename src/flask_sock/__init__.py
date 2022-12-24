@@ -12,9 +12,7 @@ class Sock:
     def __init__(self, app=None):
         self.app = None
         self.bp = None
-        if app is None:
-            self.bp = Blueprint('__flask_sock', __name__)
-        else:
+        if app is not None:
             self.app = app
             self.init_app(app)
 
@@ -26,10 +24,11 @@ class Sock:
                     be called if the application instance was not passed as
                     an argument to the constructor.
         """
-        if self.app is None:
+        if self.bp:
             app.register_blueprint(self.bp)
+        self.app = app
 
-    def route(self, path, **kwargs):
+    def route(self, path, bp=None, **kwargs):
         """Decorator to create a WebSocket route.
 
         The decorated function will be invoked when a WebSocket client
@@ -47,6 +46,10 @@ class Sock:
         included before them.
 
         :param path: the URL associated with the route.
+        :param bp: the blueprint on which to register the route. If not given,
+                   the route is attached directly to the Flask application
+                   instance. When a blueprint is used, the application is
+                   responsible for the blueprint's registration.
         :param kwargs: additional route options. See the Flask documentation
                        for the ``app.route`` decorator for details.
         """
@@ -87,6 +90,13 @@ class Sock:
                 return WebSocketResponse()
 
             kwargs['websocket'] = True
-            return (self.app or self.bp).route(path, **kwargs)(websocket_route)
+            if bp:
+                bp.route(path, **kwargs)(websocket_route)
+            elif self.app:
+                self.app.route(path, **kwargs)(websocket_route)
+            else:
+                if self.bp is None:  # pragma: no branch
+                    self.bp = Blueprint('__flask_sock', __name__)
+                self.bp.route(path, **kwargs)(websocket_route)
 
         return decorator
