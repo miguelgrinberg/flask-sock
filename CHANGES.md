@@ -1,5 +1,11 @@
 # Flask-Sock change log
 
+**Release 0.6.0** - 2022-12-24
+
+- Option to attach WebSocket route to a blueprint ([commit](https://github.com/miguelgrinberg/flask-sock/commit/3bfacdee99006a6db170d12b2988d41f4376e210))
+- Example multi-file application ([commit](https://github.com/miguelgrinberg/flask-sock/commit/10e0b3bb05580b63433106ef1b5ab42a735846d6))
+- Add Pyton 3.11 to build ([commit](https://github.com/miguelgrinberg/flask-sock/commit/245abe67838c6dd4feeaed35450dd32b8e39dec3))
+
 **Release 0.5.2** - 2022-03-17
 
 - Pass WebSocket server options in the configuration [#7](https://github.com/miguelgrinberg/flask-sock/issues/7) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/126c86a133fa5d56a5539e784bd0252f8f94140a))
