@@ -34,7 +34,7 @@ Example
 
 ::
 
-    from flask import Flask, render_template
+    from flask import Flask
     from flask_sock import Sock
 
     app = Flask(__name__)
