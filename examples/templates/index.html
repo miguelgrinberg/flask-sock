@@ -6,6 +6,7 @@
   <body>
     <h1>Flask-Sock Demo</h1>
     <p>Type <b>close</b> to end the connection.</p>
+    <span id="clock"></span>
     <div id="log"></div>
     <br>
     <form id="form">
@@ -19,7 +20,12 @@
 
       const socket = new WebSocket('ws://' + location.host + '/echo');
       socket.addEventListener('message', ev => {
-        log('<<< ' + ev.data, 'blue');
+        msg = JSON.parse(ev.data);
+        if (msg.type === 'clock') {
+          document.getElementById('clock').innerHTML = msg.text;
+        } else if (msg.type === 'log') {
+          log('<<< ' + msg.text, 'blue');
+        }
       });
       socket.addEventListener('close', ev => {
         log('<<< closed');
