@@ -18,7 +18,11 @@ def send_time(ws):
     # simple loop spiting server time into the ws chanel as a json structure
     while True:
         time.sleep(1)
-        ws.send(json.dumps({"type": "clock", "text": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
+        # try ... except to exit nicely when the client close the connection (or send throw any error)
+        try:
+            ws.send(json.dumps({"type": "clock", "text": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}))
+        except:
+            break
 
 @sock.route('/echo')
 def echo(ws):
