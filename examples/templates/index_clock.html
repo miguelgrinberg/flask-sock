@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Flask-Sock Demo</title>
+  </head>
+  <body>
+    <h1>Flask-Sock Demo</h1>
+    <p>Hit <b>close</b> to end the connection.</p>
+    <span id="clock"></span>
+    <div id="log"></div>
+    <br>
+    <input type="button" id="close" value="close">
+    <script>
+      const log = (text, color) => {
+        document.getElementById('log').innerHTML += `<span style="color: ${color}">${text}</span><br>`;
+      };
+
+      const socket = new WebSocket('ws://' + location.host + '/echo');
+      socket.addEventListener('message', ev => {
+        msg = JSON.parse(ev.data);
+        if (msg.type === 'clock') {
+          document.getElementById('clock').innerHTML = msg.text;
+        } else if (msg.type === 'log') {
+          log('<<< ' + msg.text, 'blue');
+        }
+      });
+      socket.addEventListener('close', ev => {
+        log('<<< closed');
+      });
+      document.getElementById('close').onclick = (function(ev) {
+        ev.preventDefault();
+        log('>>> Closing' , 'red');
+        socket.send("close");
+        ev.target.disabled = true;
+      });
+    </script>
+  </body>
+</html>
