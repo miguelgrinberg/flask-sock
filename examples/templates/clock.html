@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Flask-Sock Clock Demo</title>
+  </head>
+  <body>
+    <h1>Flask-Sock Demo</h1>
+    <p>Hit <b>Stop</b> to end the connection.</p>
+    <p>Server time: <span id="clock"></span> <span id="log"></span></p>
+    <input type="button" id="stop" value="Stop">
+    <script>
+      const log = (text, color) => {
+        document.getElementById('log').innerHTML += `<span style="color: ${color}">${text}</span><br>`;
+      };
+
+      const socket = new WebSocket('ws://' + location.host + '/clock');
+      socket.addEventListener('message', ev => {
+        msg = JSON.parse(ev.data);
+        document.getElementById('clock').innerHTML = msg.text;
+      });
+      socket.addEventListener('close', ev => {
+        log('[Stopped]');
+      });
+      document.getElementById('stop').onclick = (ev => {
+        ev.preventDefault();
+        socket.send("stop");
+        ev.target.disabled = true;
+      });
+    </script>
+  </body>
+</html>
