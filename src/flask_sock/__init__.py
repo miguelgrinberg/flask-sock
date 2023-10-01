@@ -83,7 +83,7 @@ class Sock:
                         elif ws.mode == 'gunicorn':
                             raise StopIteration()
                         elif ws.mode == 'werkzeug':
-                            raise ConnectionError()
+                            return super().__call__(*args, **kwargs)
                         else:
                             return []
 
