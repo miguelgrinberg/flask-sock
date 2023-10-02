@@ -1,5 +1,11 @@
 # Flask-Sock change log
 
+**Release 0.7.0** - 2023-10-02
+
+- Avoid crashes on WebSocket exit in debug mode [#70](https://github.com/miguelgrinberg/flask-sock/issues/70) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/78cf5d19e8ceccc366b029755341e822e578d003))
+- Clock example [#45](https://github.com/miguelgrinberg/flask-sock/issues/45) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/fde3c8e2b8795603f4a8bea202d105e8c886c31a)) (thanks **Gilbert Brault**!)
+- Remove unused import in documentation example [#43](https://github.com/miguelgrinberg/flask-sock/issues/43) ([commit](https://github.com/miguelgrinberg/flask-sock/commit/568776ab2e4068065b75dea4a3051cc264a6891a)) (thanks **Ali-Akber Saifee**!)
+
 **Release 0.6.0** - 2022-12-24
 
 - Option to attach WebSocket route to a blueprint ([commit](https://github.com/miguelgrinberg/flask-sock/commit/3bfacdee99006a6db170d12b2988d41f4376e210))
