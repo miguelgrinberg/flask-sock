@@ -6,39 +6,15 @@ on:
   pull_request:
     branches:
       - main
+env:
+  FORCE_COLOR: '1'
 jobs:
-  lint:
-    name: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-      - run: python -m pip install --upgrade pip wheel
-      - run: pip install tox tox-gh-actions
-      - run: tox -eflake8
-      - run: tox -edocs
-  tests:
-    name: tests
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python: ['3.7', '3.8', '3.9', '3.10', '3.11', 'pypy-3.8']
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python }}
-      - run: python -m pip install --upgrade pip wheel
-      - run: pip install tox tox-gh-actions
-      - run: tox
   coverage:
     name: coverage
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
       - run: python -m pip install --upgrade pip wheel
       - run: pip install tox tox-gh-actions
       - run: tox
@@ -46,3 +22,74 @@ jobs:
         with:
           files: ./coverage.xml
           fail_ci_if_error: true
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: python -m pip install --upgrade pip wheel
+      - run: pip install tox
+      - run: tox -e flake8
+      - run: tox -e docs
+  tests:
+    name: tests
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python:
+          - '3.12'
+          - '3.11'
+          - '3.10'
+          - '3.9'
+          - '3.8'
+          - '3.7'
+          - 'pypy3.10'
+          - 'pypy3.9'
+          - 'pypy3.8'
+          - 'pypy3.7'
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --upgrade pip wheel
+      - run: pip install tox tox-gh-actions
+      - run: tox
+  tests-36:
+    name: tests
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            python: '3.6'
+          - os: ubuntu-latest
+            python: 'pypy3.6'
+          - os: macos-latest
+            python: '3.6'
+          - os: windows-latest
+            python: '3.6'
+          - os: windows-2019
+            python: 'pypy3.6'
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install --upgrade pip wheel
+      - run: pip install "flask>=2" "simple-websocket>=0.5.1" pytest pytest-cov
+      - name: Set PYTHONPATH on Linux/MacOS
+        run: echo "PYTHONPATH=$PWD/src" >> "$GITHUB_ENV"
+        if: startsWith(matrix.os, 'ubuntu') || startsWith(matrix.os, 'macos')
+      - name: Set PYTHONPATH on Windows
+        run: |
+          "PYTHONPATH=$env:PYTHONPATH;.\src" | Out-File -FilePath $env:GITHUB_ENV -Append
+        if: startsWith(matrix.os, 'windows')
+      - name: pytest
+        run: pytest -p no:logging --cov=src/flask_sock --cov-branch --cov-report=term-missing
