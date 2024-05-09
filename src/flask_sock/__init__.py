@@ -54,49 +54,56 @@ class Sock:
                        for the ``app.route`` decorator for details.
         """
         def decorator(f):
-            @wraps(f)
-            def websocket_route(*args, **kwargs):  # pragma: no cover
-                ws = Server(request.environ, **current_app.config.get(
-                    'SOCK_SERVER_OPTIONS', {}))
-                try:
-                    f(ws, *args, **kwargs)
-                except ConnectionClosed:
-                    pass
-                try:
-                    ws.close()
-                except:  # noqa: E722
-                    pass
+            if hasattr(f, "__flask_sock_routed__"):
+                websocket_route = f
+            else:
+                @wraps(f)
+                def websocket_route(*args, **kwargs):
+                    ws = Server(request.environ, **current_app.config.get(
+                        'SOCK_SERVER_OPTIONS', {}))
+                    try:
+                        f(ws, *args, **kwargs)
+                    except ConnectionClosed:
+                        pass
+                    try:
+                        ws.close()
+                    except:  # noqa: E722
+                        pass
 
-                class WebSocketResponse(Response):
-                    def __call__(self, *args, **kwargs):
-                        if ws.mode == 'eventlet':
-                            try:
-                                from eventlet.wsgi import WSGI_LOCAL
-                                ALREADY_HANDLED = []
-                            except ImportError:
-                                from eventlet.wsgi import ALREADY_HANDLED
-                                WSGI_LOCAL = None
+                    class WebSocketResponse(Response):
+                        def __call__(self, *args, **kwargs):
+                            if ws.mode == 'eventlet':
+                                try:
+                                    from eventlet.wsgi import WSGI_LOCAL
+                                    ALREADY_HANDLED = []
+                                except ImportError:
+                                    from eventlet.wsgi import ALREADY_HANDLED
+                                    WSGI_LOCAL = None
 
-                            if hasattr(WSGI_LOCAL, 'already_handled'):
-                                WSGI_LOCAL.already_handled = True
-                            return ALREADY_HANDLED
-                        elif ws.mode == 'gunicorn':
-                            raise StopIteration()
-                        elif ws.mode == 'werkzeug':
-                            return super().__call__(*args, **kwargs)
-                        else:
-                            return []
+                                if hasattr(WSGI_LOCAL, 'already_handled'):
+                                    WSGI_LOCAL.already_handled = True
+                                return ALREADY_HANDLED
+                            elif ws.mode == 'gunicorn':
+                                raise StopIteration()
+                            elif ws.mode == 'werkzeug':
+                                return super().__call__(*args, **kwargs)
+                            else:
+                                return []
 
-                return WebSocketResponse()
+                    return WebSocketResponse()
 
             kwargs['websocket'] = True
             if bp:
-                bp.route(path, **kwargs)(websocket_route)
+                decorator_impl = bp.route(path, **kwargs)
             elif self.app:
-                self.app.route(path, **kwargs)(websocket_route)
+                decorator_impl = self.app.route(path, **kwargs)
             else:
                 if self.bp is None:  # pragma: no branch
                     self.bp = Blueprint('__flask_sock', __name__)
-                self.bp.route(path, **kwargs)(websocket_route)
+                decorator_impl = self.bp.route(path, **kwargs)
+
+            websocket_route = decorator_impl(websocket_route)
+            websocket_route.__flask_sock_routed__ = True
+            return websocket_route
 
         return decorator
