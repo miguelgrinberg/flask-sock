@@ -3,6 +3,18 @@ from flask import Blueprint, request, Response, current_app
 from simple_websocket import Server, ConnectionClosed
 
 
+class WebSocketRequestCompleted(Exception):
+    """Exception indicating that a WebSocket request has completed normally.
+
+    This exception can be used in Flask Sock applications to signify that a
+    WebSocket request has finished as expected, and should not be treated as an error.
+
+    It can be combined with the 'ignore_errors' option in Sentry's initialization
+    to ensure that such exceptions are not reported as errors in Sentry.
+    """
+    pass
+
+
 class Sock:
     """Instantiate the Flask-Sock extension.
 
@@ -81,7 +93,7 @@ class Sock:
                                 WSGI_LOCAL.already_handled = True
                             return ALREADY_HANDLED
                         elif ws.mode == 'gunicorn':
-                            raise StopIteration()
+                            raise WebSocketRequestCompleted()
                         elif ws.mode == 'werkzeug':
                             return super().__call__(*args, **kwargs)
                         else:
